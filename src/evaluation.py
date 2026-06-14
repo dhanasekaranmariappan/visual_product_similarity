@@ -21,7 +21,7 @@ Usage:
 import sys
 import time
 from pathlib import Path
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
 
 import numpy as np
 import pandas as pd

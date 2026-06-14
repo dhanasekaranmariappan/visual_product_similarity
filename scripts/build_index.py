@@ -16,10 +16,10 @@ Usage:
     python scripts/build_index.py --batch-size 32  # If GPU OOM
 """
 
+import argparse
+import pickle
 import sys
 import time
-import pickle
-import argparse
 from pathlib import Path
 
 import numpy as np

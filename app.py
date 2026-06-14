@@ -16,21 +16,20 @@ Launch:
     python app.py --share    # Create public URL
 """
 
-import sys
 import os
+import sys
 from pathlib import Path
 
 import gradio as gr
 import numpy as np
 import pandas as pd
-from PIL import Image
 from loguru import logger
+from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from config import Config
-from src.similarity_search import SimilaritySearchEngine
 from src.evaluation import RetrievalEvaluator
-
+from src.similarity_search import SimilaritySearchEngine
 
 # =========================================================================
 # CUSTOM CSS — Premium dark theme with glassmorphism

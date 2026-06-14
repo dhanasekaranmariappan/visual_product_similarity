@@ -15,9 +15,9 @@ Usage:
     python scripts/download_data.py --demo    # Create a small demo dataset
 """
 
-import sys
-import shutil
 import argparse
+import shutil
+import sys
 from pathlib import Path
 
 from loguru import logger
@@ -50,9 +50,9 @@ def create_demo_dataset(num_per_category: int = 50):
     This is ONLY for testing the pipeline when no real product images
     are available. For real results, use actual product images.
     """
-    from torchvision import datasets
-    from PIL import Image
     import numpy as np
+    from PIL import Image
+    from torchvision import datasets
 
     logger.info("Creating demo dataset from CIFAR-10 (for pipeline testing only)...")
 

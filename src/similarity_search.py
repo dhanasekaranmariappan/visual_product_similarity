@@ -14,16 +14,16 @@ Usage:
     results = engine.search_pil(pil_image, top_k=5, category_filter="Shoes")
 """
 
+import pickle
 import sys
 import time
-import pickle
 from pathlib import Path
-from typing import List, Dict, Optional, Union
+from typing import Dict, List, Optional, Union
 
-import numpy as np
 import faiss
-from PIL import Image
+import numpy as np
 from loguru import logger
+from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from config import Config

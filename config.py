@@ -11,8 +11,9 @@ Usage:
 """
 
 import os
-import torch
 from pathlib import Path
+
+import torch
 
 
 class Config:

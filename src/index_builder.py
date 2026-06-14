@@ -23,8 +23,8 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-import numpy as np
 import faiss
+import numpy as np
 from loguru import logger
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))

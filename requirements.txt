@@ -1,0 +1,132 @@
+# =============================================================================
+# Visual Product Similarity System — Dependencies
+# =============================================================================
+# Install: pip install -r requirements.txt
+# GPU Note: If you have an NVIDIA GPU (like RTX 4050), install the CUDA version
+#           of PyTorch FIRST from https://pytorch.org/get-started/locally/
+#           e.g.: pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+# =============================================================================
+
+# ---------------------------------------------------------------------------
+# 1. DEEP LEARNING FRAMEWORK
+# ---------------------------------------------------------------------------
+# torch (PyTorch): The core deep learning framework. We use it to load the
+#   pretrained ResNet50 model, run inference (forward pass) on images to
+#   extract feature embeddings, and leverage GPU acceleration via CUDA.
+#   Why PyTorch over TensorFlow? More Pythonic API, easier debugging, and
+#   dominant in research — making it easier to swap models in the future.
+torch>=2.0.0
+
+# torchvision: PyTorch's computer vision library. Provides:
+#   - Pretrained models (ResNet50, EfficientNet, etc.) via torchvision.models
+#   - Image transforms (Resize, CenterCrop, Normalize) via torchvision.transforms
+#   - DataLoader utilities for efficient batch processing of images
+#   We use it to load ResNet50 with ImageNet weights and preprocess images
+#   into the exact format the model expects (224x224, normalized).
+torchvision>=0.15.0
+
+# ---------------------------------------------------------------------------
+# 2. VECTOR SIMILARITY SEARCH
+# ---------------------------------------------------------------------------
+# faiss-cpu: Facebook AI Similarity Search — a library for efficient similarity
+#   search and clustering of dense vectors. We use it to:
+#   - Store all 2048-dimensional image embeddings in an optimized index
+#   - Perform cosine similarity search in milliseconds (not seconds)
+#   - Scale to millions of vectors with approximate nearest neighbor (ANN)
+#   Why FAISS over brute-force numpy? FAISS is 10-100x faster for large
+#   datasets and supports GPU acceleration. We use IndexFlatIP (Inner Product)
+#   with L2-normalized vectors, which is mathematically equivalent to cosine
+#   similarity.
+#   Note: Install faiss-gpu instead if you want GPU-accelerated search
+#   (pip install faiss-gpu). For <100K images, CPU is fast enough (<10ms).
+faiss-cpu>=1.7.0
+
+# ---------------------------------------------------------------------------
+# 3. FRONTEND / UI
+# ---------------------------------------------------------------------------
+# gradio: A Python library to build interactive ML demos and web apps with
+#   minimal code. We use it to create the visual search interface where users
+#   can upload images, adjust parameters (Top-K, category filter), and see
+#   similar products in a gallery layout. Gradio handles all the HTML/JS/CSS
+#   and provides components like Image upload, Gallery, Sliders, and Dropdowns.
+#   Why Gradio over Streamlit? User explicitly requested Gradio. Gradio also
+#   has better support for image galleries and ML-specific components.
+gradio>=4.0.0
+
+# ---------------------------------------------------------------------------
+# 4. IMAGE PROCESSING
+# ---------------------------------------------------------------------------
+# Pillow (PIL): The Python Imaging Library. We use it to:
+#   - Open and read image files in various formats (JPEG, PNG, WebP, BMP)
+#   - Convert images to RGB mode (some product images may be RGBA or grayscale)
+#   - Validate that image files are not corrupted before processing
+#   torchvision transforms also depend on Pillow internally.
+Pillow>=9.0.0
+
+# ---------------------------------------------------------------------------
+# 5. NUMERICAL & DATA PROCESSING
+# ---------------------------------------------------------------------------
+# numpy: The fundamental package for numerical computing in Python. We use it
+#   for all array/matrix operations including:
+#   - Storing and manipulating embedding vectors (shape: N x 2048)
+#   - Converting between PyTorch tensors and numpy arrays (FAISS requires numpy)
+#   - L2 normalization of vectors before FAISS indexing
+#   - Saving/loading embeddings to/from .npy files for persistence
+numpy>=1.24.0
+
+# pandas: Data manipulation and analysis library. We use it to:
+#   - Create and manage the product metadata table (image paths, categories,
+#     filenames) as a DataFrame
+#   - Export evaluation results as formatted tables
+#   - Read/write CSV files for the metadata catalog
+#   - Perform category-level aggregation of evaluation metrics
+pandas>=2.0.0
+
+# ---------------------------------------------------------------------------
+# 6. MACHINE LEARNING UTILITIES
+# ---------------------------------------------------------------------------
+# scikit-learn: General-purpose ML library. We use specific utilities:
+#   - sklearn.manifold.TSNE: Dimensionalize 2048-d embeddings to 2D for
+#     visualization (are similar products clustered together?)
+#   - sklearn.metrics: Additional metric calculations if needed
+#   - sklearn.model_selection.train_test_split: Split data for evaluation
+scikit-learn>=1.3.0
+
+# ---------------------------------------------------------------------------
+# 7. VISUALIZATION
+# ---------------------------------------------------------------------------
+# matplotlib: The foundational plotting library. We use it to:
+#   - Create t-SNE / UMAP scatter plots of embeddings (colored by category)
+#   - Plot Precision@K and Recall@K curves across different K values
+#   - Generate visual inspection grids (query image + top-K results)
+#   - Create charts for the README and evaluation reports
+matplotlib>=3.7.0
+
+# ---------------------------------------------------------------------------
+# 8. PROGRESS TRACKING
+# ---------------------------------------------------------------------------
+# tqdm: Provides smart progress bars for loops. Essential when:
+#   - Extracting embeddings from thousands of images (shows ETA)
+#   - Building the FAISS index
+#   - Running batch evaluation across test images
+#   Without tqdm, long-running processes give no feedback — frustrating
+#   when processing 18K+ images.
+tqdm>=4.65.0
+
+# tabulate: Required by pandas.DataFrame.to_markdown() to render DataFrames
+#   as markdown-formatted tables. We use this to display search results and
+#   evaluation metrics as clean tables in the Gradio UI.
+tabulate>=0.9.0
+
+# ---------------------------------------------------------------------------
+# 9. LOGGING & UTILITIES
+# ---------------------------------------------------------------------------
+# loguru: A modern, user-friendly logging library (replaces Python's built-in
+#   logging module). We use it for:
+#   - Structured, colored console output during pipeline execution
+#   - Logging skipped/corrupted images during data loading
+#   - Recording timing information for embedding extraction and search
+#   - Writing log files for debugging production issues
+#   Why loguru over stdlib logging? Zero-config, beautiful output, and
+#   built-in file rotation — perfect for a portfolio project.
+loguru>=0.7.0
